@@ -26,16 +26,87 @@ int main() {
         cout << "Pasirinkimas: ";
         cin >> pasirinkimas;
 
+        // Mokinio pridėjimas
         if (pasirinkimas == 1) {
             if (mokiniuSkaicius < MAX_MOKINIU) {
                 cout << "Iveskite varda: ";
-                cin >> vardai[mokiniuSkaicius];
+                cin >> vardai[mokiniuSkaicius]; // vardas saugomas masyve
                 
                 int kiek;
                 cout << "Kiek pazymiu (max " << MAX_PAZYMIU << ")? ";
                 cin >> kiek;
+            // Apsauga nuo netinkamo įvedimo
+                if (kiek > MAX_PAZYMIU) kiek = MAX_PAZYMIU;
+                if (kiek < 0) kiek = 0; 
+
+                // Įvedamas kiekiena pažymys su apsauga 
+                for (int i = 0; i < kiek; i++) {
+                    int laikinasPazymys;
+                    do {
+                        cout << "Pazymys nr. " << i + 1 << " (1-10): ";
+                        cin >> laikinasPazymys;
+                        if (laikinasPazymys < 1 || laikinasPazymys > 10) {
+                            cout << "Klaida! Pazymys turi buti nuo 1 iki 10.\n";
+                        }
+                    } while (laikinasPazymys < 1 || laikinasPazymys > 10);
+                    
+                    // Tinkamas pažymys išsaugomas masyve
+                    pazymiai[mokiniuSkaicius][i] = laikinasPazymys;
+                }
+                // Išsaugoma kiek pažymių gavo mokinys ir padidinamas mokinių skaičius
+                pazymiuKiekis[mokiniuSkaicius] = kiek;
+                mokiniuSkaicius++;
+                cout << "Mokinys pridetas!\n";
+            } else {
+                cout << "Sarasas pilnas!\n";
             }
         }
+        // Mokiniai ir jų pažymių rodymas
+        else if (pasirinkimas == 2) { 
+            if (mokiniuSkaicius == 0) cout << "Sarasas tuscias.\n";
+            for (int i = 0; i < mokiniuSkaicius; i++) {
+                cout << i + 1 << ". " << vardai[i] << " | Pazymiai: ";
+                // Konkretaus mokinio pažymių atspausdinimas
+                for (int j = 0; j < pazymiuKiekis[i]; j++) {
+                    cout << pazymiai[i][j] << " ";
+                }
+                cout << endl;
             }
+        }
+        // Mokinio peržiūra pagal numerį
+        else if (pasirinkimas == 3) { 
+            int nr;
+            cout << "Iveskite mokinio numeri: ";
+            cin >> nr;
+            int idx = nr - 1;
+            // Patikrinima ar toks mokinys egzistuoja, jei taip atspausdinama jo info
+            if (idx >= 0 && idx < mokiniuSkaicius) {
+                cout << vardai[idx] << " pazymiai: ";
+                if (pazymiuKiekis[idx] == 0) cout << "nėra.";
+                for (int j = 0; j < pazymiuKiekis[idx]; j++) {
+                    cout << pazymiai[idx][j] << " ";
+                }
+                cout << endl;
+            } else {
+                cout << "Klaida: Tokio mokinio nera.\n";
+            }
+        }
+
+        else if (pasirinkimas == 4) { 
+            int mNr, pNr;
+            cout << "Kurio mokinio pazymi keisti? ";
+            cin >> mNr;
+            int mIdx = mNr - 1;
+            if (mIdx >= 0 && mIdx < mokiniuSkaicius) 
+            // patikrinimas kad įvesttas būtų galiojantis mokinio nr
+            {
+                if (pazymiuKiekis[mIdx] == 0) {
+                    cout << "Mokinys neturi pazymiu.\n";
+                } else {
+                    cout << "Kuri pazymi keisti (1-" << pazymiuKiekis[mIdx] << ")? ";
+                    cin >> pNr;
+                    int pIdx = pNr - 1;
+                    if (pIdx >= 0 && pIdx < pazymiuKiekis[mIdx]) {
+                        int naujasPazymys;
     return 0;
 }
