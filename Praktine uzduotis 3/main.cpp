@@ -1,0 +1,59 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <windows.h>
+
+using namespace std;
+
+struct menuItemType {
+    string menuItem;
+    double menuPrice;
+};
+
+const int MENU_SIZE = 8; // Meniu elementų skaičius
+
+// Funkcijų prototipai
+void getData(menuItemType menuList[]);
+void showMenu(menuItemType menuList[]);
+void printCheck(menuItemType menuList[], int orderQuantities[]);
+
+int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    menuItemType menuList[MENU_SIZE];
+    int orderQuantities[MENU_SIZE] = {0}; // Masyvas, kuriame saugoma kiek porcijų kiekvieno patiekalo užsakyta
+
+    // duomenų nuskaitymas iš failo
+    getData(menuList);
+
+    // Parodo meniu
+    showMenu(menuList);
+
+    int choice;
+    int quantity;
+
+    // Vartotojo pasirinkimų ciklas
+    cout << "\nIveskite patiekalo numeri (1-" << MENU_SIZE << ") arba 0, jei norite baigti: ";
+    while (cin >> choice && choice != 0) {
+        if (choice > 0 && choice <= MENU_SIZE) {
+            cout << "Kiek porciju norite? ";
+            cin >> quantity;
+            if (quantity > 0) {
+                // Pridedame užsakytą kiekį prie patiekalo
+                orderQuantities[choice - 1] += quantity;
+                cout << "Prideta" << endl;
+            } else {
+                cout << "Neteisingas kiekis." << endl;
+            }
+        } else {
+            cout << "Neteisingas pasirinkimas. Bandykite is naujo." << endl;
+        }
+        cout << "Iveskite patiekalo numeri (1-" << MENU_SIZE << ") arba 0, jei norite baigti: ";
+    }
+
+    // Atspausdiname sąskaitą į ekraną ir į failą
+    printCheck(menuList, orderQuantities);
+
+    return 0;
+}
