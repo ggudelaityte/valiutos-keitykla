@@ -130,3 +130,20 @@ void printCheck(menuItemType menuList[], int orderQuantities[]) {
         outFile.close();
         return;
     }
+
+    // Mokesčių suskaičiavimas
+    taxAmount = totalWithoutTax * taxRate;
+    finalTotal = totalWithoutTax + taxAmount;
+
+    // Spausdiname mokesčius ir galutinę sumą į ekraną
+    cout << "\n" << left << setw(43) << "Mokesciai (21%)" << fixed << setprecision(2) << taxAmount << " Eur" << endl;
+    cout << left << setw(43) << "Galutine suma" << fixed << setprecision(2) << finalTotal << " Eur" << endl;
+    cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+    // Spausdiname mokesčius ir galutinę sumą į failą
+    outFile << "\n" << left << setw(43) << "Mokesciai (21%)" << fixed << setprecision(2) << taxAmount << " Eur" << endl;
+    outFile << left << setw(43) << "Galutine suma" << fixed << setprecision(2) << finalTotal << " Eur" << endl;
+
+    outFile.close();
+    cout << "Saskaita sekmingai issaugota faile receipt.txt\n";
+}
